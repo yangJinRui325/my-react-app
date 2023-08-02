@@ -25,9 +25,9 @@ const AppletDesign: React.FC = () => {
   return (
     <PageContainer>
       <Layout>
-        {/* <Sider style={siderLeftStyle} width={'20%'}>
-            <SideLeftBar />
-          </Sider> */}
+        <Sider style={siderLeftStyle} width={360}>
+          <SideLeftBar />
+        </Sider>
         <Content>
           <Container />
         </Content>
