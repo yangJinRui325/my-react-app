@@ -1,12 +1,14 @@
 import type { ComponentProps } from 'react'
+import type { ItemInterface } from 'react-sortablejs';
 
 export type PropsTabKey = 1 | 2 | 3
 
 export type IAnyObject<T = any> = Record<string, T>;
-export interface IVAppletComponent {
+export interface IVAppletComponent extends ItemInterface {
   // 唯一标识
-  key?: string,
-  id?: number
+  compId: string
+  // 类型哪类组件
+  type?: 'base' | 'feat' | 'other'
   // 组件类型
   component: string
   // 组件label
@@ -22,27 +24,13 @@ export interface IVAppletComponent {
   // 组件选项
   options?: IAnyObject
 }
+
 export interface IVAppletConfig {
   // 存放组件列表
   schemas: IVAppletComponent[]
   // 当前选中的组件
   currentItem?: IVAppletComponent
   // 切换属性面板
-  activeKey: PropsTabKey
+  activeKey?: PropsTabKey
   colon?: boolean
-}
-
-export interface IItem {
-  id: string,
-  name: string
-}
-
-export interface IAppState {
-  items: IItem[];
-  selected: IItem[];
-}
-
-export interface IMoveResult {
-  appletUnit: IItem[];
-  appletPage: IItem[];
 }

@@ -32,6 +32,12 @@
         component: './Welcome',
       },
       {
+        path: '/admin/react',
+        name: 'demo',
+        icon: 'smile',
+        component: './Demo/DemoReact/index',
+      },
+      {
         component: './404',
       },
     ],
@@ -53,6 +59,22 @@
     component: './AppletDesign',
     footerRender: false // 当前路由不展示页脚
   },
+  // {
+  //   path: '/demo',
+  //   name: '案例',
+  //   icon: 'book',
+  //   routes: [
+  //     {
+  //       path: '/demo/react',
+  //       name: 'react例子',
+  //       icon: 'profile',
+  //       component: DemoReact,
+  //     },
+  //     // {
+  //     //   component: './404',
+  //     // },
+  //   ],
+  // },
   {
     component: './404',
   },

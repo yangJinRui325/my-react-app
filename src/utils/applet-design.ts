@@ -9,7 +9,7 @@ export function generateKey(formItem): string | boolean {
   if (formItem && formItem.component) {
     const key = uniqueId(`${toLine(formItem.component)}_`);
     formItem.key = key;
-    formItem.field = key;
+    formItem.compId = key;
 
     return true;
   }

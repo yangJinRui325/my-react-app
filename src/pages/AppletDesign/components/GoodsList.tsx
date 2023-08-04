@@ -1,14 +1,19 @@
 import React from 'react';
+import style from './GoodsList.less';
 
-const list = [1, 2, 3];
+const listStyle = 'type4';
+console.log(style[listStyle]);
+
+const list = [1, 2, 3, 4, 5];
 const GoodList: React.FC = () => {
   return (
-    <ul>
+    <ul className={`${style.good_list_box} ${style[listStyle]}`}>
       {list.map((item) => {
-        <li>
-          {item}
-          <img src="https://fakeimg.pl/350x200/?text=World&font=lobster" />
-        </li>;
+        return (
+          <li key={item} className={style.good_list_item}>
+            {item}
+          </li>
+        );
       })}
     </ul>
   );

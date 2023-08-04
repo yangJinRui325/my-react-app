@@ -1,4 +1,41 @@
 @import (reference) '~antd/es/style/themes/index';
 
-.good-list-box {
+.good_list_box {
+  display: grid;
+  grid-gap: 8px;
+  padding: 8px;
+  list-style: none;
+
+  &.type1 {
+    grid-template-columns: 1fr;
+    // .good_list_item:nth-child(3n + 1) {
+    //   grid-column: span 2;
+    // }
+  }
+
+  &.type2 {
+    grid-template-columns: 1fr 1fr;
+    // .good_list_item:nth-child(3n + 1) {
+    //   grid-column: span 2;
+    // }
+  }
+
+  &.type3 {
+    grid-template-columns: 1fr 1fr 1fr;
+    // .good_list_item:nth-child(3n + 1) {
+    //   grid-column: span 2;
+    // }
+  }
+
+  &.type4 {
+    grid-template-columns: 1fr 1fr;
+    .good_list_item:nth-child(3n + 1) {
+      grid-column: span 2;
+    }
+  }
+
+  .good_list_item {
+    height: 150px;
+    background-color: aqua;
+  }
 }

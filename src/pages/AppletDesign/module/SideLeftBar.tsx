@@ -6,10 +6,6 @@ import style from './SideLeftBar.less';
 
 import { baseComponents } from '../core/itemDesignConfig';
 
-import { generateKey } from '@/utils/applet-design';
-
-import { cloneDeep } from 'lodash';
-
 const grid: number = 8;
 
 const boxStyle: React.CSSProperties = {
@@ -21,15 +17,6 @@ const boxStyle: React.CSSProperties = {
   gridRowGap: grid,
 };
 
-const appletConfig: IVAppletConfig = {
-  schemas: [],
-  currentItem: {
-    component: '',
-    componentProps: {},
-  },
-  activeKey: 1,
-};
-
 console.log(baseComponents);
 
 const SideLeftBar: React.FC = () => {
@@ -39,7 +26,7 @@ const SideLeftBar: React.FC = () => {
       <p>基础组件</p>
       <ReactSortable
         style={boxStyle}
-        group={{ name: 'applet-unit', pull: false, put: false }}
+        group={{ name: 'applet-design', pull: 'clone', put: false }}
         list={appletUnit}
         sort={false}
         item-key="type"
@@ -52,7 +39,7 @@ const SideLeftBar: React.FC = () => {
         tag="ul"
       >
         {appletUnit.map((item) => (
-          <li className={style.unitItem} key={item.id}>
+          <li className={style.unitItem} data-compid={item.compId} key={item.id}>
             {item.label}
           </li>
         ))}

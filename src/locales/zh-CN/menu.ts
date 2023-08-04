@@ -4,6 +4,7 @@ export default {
   'menu.home': '首页',
   'menu.admin': '管理页',
   'menu.admin.sub-page': '二级管理页',
+  'menu.admin.demo': 'react 例子',
   'menu.appletDesign': '小程序配置',
   'menu.login': '登录',
   'menu.register': '注册',

@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useReducer } from 'react';
+import type { SortableEvent } from 'react-sortablejs';
 import { ReactSortable } from 'react-sortablejs';
+import { cloneDeep } from 'lodash';
+import { generateKey } from '@/utils/applet-design';
 
-import type { IVAppletComponent, IMoveResult } from '../typings/drag-type';
-import { Flex } from 'grid-styled';
+import type { IVAppletComponent, IVAppletConfig } from '../typings/drag-type';
+import { Flex, Box } from 'grid-styled';
 import style from './Container.less';
 
-import GoodList from '../components/GoodsList';
+import { baseComponents } from '../core/itemDesignConfig';
+
+import GoodsList from '../components/GoodsList';
 import Divider from '../components/Divider';
 
 const appletPageStyle: React.CSSProperties = {
@@ -26,37 +31,84 @@ const boxStyle: React.CSSProperties = {
   gridTemplateColumns: '1fr 1fr 1fr',
   gridColumnGap: grid,
   gridRowGap: grid,
+  // flexDirection: 'column'
 };
 
 const componentMap = {
-  GoodList: GoodList,
-  Divider: Divider,
+  GoodsList: <GoodsList />,
+  Divider: <Divider />,
+};
+
+const pages: IVAppletConfig = {
+  schemas: [],
+  currentItem: {},
+};
+
+const findComp = (compId: string): IVAppletComponent => {
+  return baseComponents.find((item) => item.compId === compId);
+};
+
+// 添加唯一key
+const handleListPushDrag = (item: IVAppletComponent) => {
+  const formItem = cloneDeep(item);
+  generateKey(formItem);
+  return formItem;
+};
+
+const pagesReducer = (state: IVAppletConfig, action) => {
+  const { pageList, currentItem } = action;
+
+  return {
+    schemas: pageList,
+    currentItem: currentItem,
+  };
 };
 
 const Container: React.FC = () => {
-  const [appletPage, setAppletPage] = useState<IVAppletComponent[]>([]);
-  const [appletUnit, setAppletUnit] = useState<IVAppletComponent[]>([]);
+  // const componentToRender = 'GoodsList';
+  // const DynamicComponent = componentMap[componentToRender];
 
-  const componentToRender = 'GoodList';
-  const DynamicComponent = componentMap[componentToRender];
+  const [pagesState, dispatchPages] = useReducer(pagesReducer, pages);
+
+  const addComponent = (
+    evt: SortableEvent,
+    newIndex: number,
+    compList: IVAppletComponent[],
+  ): void => {
+    const { compid = '' } = evt.item.dataset;
+    const comp = findComp(compid);
+    // 非注册组件返回
+    if (!comp) return;
+    const item = handleListPushDrag(comp);
+    compList.splice(newIndex, 0, item);
+    dispatchPages({ pageList: compList, currentItem: item });
+  };
+
   return (
     <div style={appletPageStyle}>
-      <ReactSortable
-        group={{ name: 'applet-unit', pull: true, put: true }}
-        component-data={{ name: 'list', tag: 'div', type: 'transition-group' }}
-        list={appletPage}
-        sort={true}
-        ghostClass="moving"
-        animation={180}
-        setList={setAppletPage}
-      >
-        {appletPage.map((item) => (
-          <div key={item.id}>
-            {item.name}
-            {/* <DynamicComponent /> */}
-          </div>
-        ))}
-      </ReactSortable>
+      <Flex flexDirection={'column'} style={{ overflow: 'hidden', height: '100%' }}>
+        <div className={style.appletHeader}>
+          <img src="https://m.jbzyun.cn/mshop/static/img/miniprogram-nav.f58e1d4.png" alt="" />
+        </div>
+        <ReactSortable
+          style={{ flex: 1, overflowY: 'auto' }}
+          group={{ name: 'applet-design', pull: true, put: true }}
+          list={pagesState.schemas}
+          sort={true}
+          ghostClass="moving"
+          animation={180}
+          // 废弃他，用on-event来触发
+          setList={() => {}}
+          onAdd={(evt) => {
+            const { newIndex = 0 } = evt;
+            addComponent(evt, newIndex, pagesState.schemas);
+          }}
+        >
+          {pagesState.schemas.map((item: IVAppletComponent) => (
+            <div key={item.compId}>{componentMap[item.component]}</div>
+          ))}
+        </ReactSortable>
+      </Flex>
     </div>
   );
 };
